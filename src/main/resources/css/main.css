@@ -1,0 +1,28 @@
+html, body {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	background-color: #000000;
+	color: #FFFFFF;
+}
+
+#wrapper {
+	display: table;
+	width: 70%;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#canvas {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#canvas canvas {
+	border: 1px solid white;
+}
