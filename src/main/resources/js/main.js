@@ -8,6 +8,31 @@ canvas.height = canvasHeight;
 document.getElementById("canvas").appendChild(canvas);
 var directions = ["left", "right", "up", "down"];
 
+// handling keys
+document.onkeydown = handleKey;
+
+function handleKey(e) {
+	console.log(e);
+	var message;
+	e = e || window.event;
+	
+	if (e.keyCode == '38') {
+		// up arrow
+		message = "up";
+	} else if (e.keyCode == '40') {
+		// down
+		message = "down";
+	} else if (e.keyCode == '37') {
+		// left
+		message = "left";
+	} else if (e.keyCode == '39') {
+		// right
+		message = "right";
+	}
+	
+	sendMessage(message);
+}
+
 //shim layer with setTimeout fallback
 window.requestAnimFrame = (function(){
   return  window.requestAnimationFrame || 
@@ -25,7 +50,7 @@ socket.onmessage = function(event) {
 	var data = JSON.parse(event.data);
 	ctx.fillStyle = "rgb(0, 0, 0)";
 	ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-	ctx.fillStyle = "rgb(255, 255, 255)";
+	ctx.fillStyle = "rgb(255, 0, 255)";
 	
 	for (var i = 0; i < data.length; i++) {
 		ctx.fillRect(data[i].x, data[i].y, 10, 10);
@@ -34,7 +59,6 @@ socket.onmessage = function(event) {
 
 socket.onopen = function() {
 	console.log('Connected');
-	sendRandomDirection();
 };
 
 
@@ -42,9 +66,6 @@ socket.onerror = function(e) {
 	console.log('error: ' + e)
 };
 
-function sendRandomDirection() {
-	setTimeout(sendRandomDirection, 1000);
-	var message = directions[Math.round(Math.random() * 3)];
-	console.log(message);
+function sendMessage(message) {
 	socket.send(message);
 }
