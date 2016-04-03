@@ -8,9 +8,14 @@
 </head>
 <body>
 	<div id="wrapper">
-		<div id="canvas"></div>
+		<div id="canvas">
+			<canvas id="game" width="800" height="600"></canvas>
+		</div>
 	</div>
 	
-	<script src="resources/js/main.js"></script>
+	<script src="resources/js/game.js"></script>
+	<script>
+		game.start("ws://localhost:8080/WebSocketsTest/ws", document.getElementById('game'));
+	</script>
 </body>
 </html>

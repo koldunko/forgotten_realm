@@ -51,9 +51,9 @@
 				<configuration>
 					<resourceEncoding>utf-8</resourceEncoding>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
-					<webResources>
+ 					<webResources>
 						<resource>
-							<directory>/src/main/resources</directory>
+							<directory>src/main/resources</directory>
 							<targetPath>resources</targetPath>
 						</resource>
 					</webResources>

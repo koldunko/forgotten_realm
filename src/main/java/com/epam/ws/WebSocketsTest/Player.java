@@ -1,5 +1,7 @@
 package com.epam.ws.WebSocketsTest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Player {
 	private static int i = 0;
 	
@@ -9,8 +11,8 @@ public class Player {
 	
 	public Player() {
 		this.name = "Player " + ++i;
-		this.x = 350;
-		this.y = 350;
+		this.x = 352;
+		this.y = 352;
 	}
 	
 	public void move(int x, int y) {

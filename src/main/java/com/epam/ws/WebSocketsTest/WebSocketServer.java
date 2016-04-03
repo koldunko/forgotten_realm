@@ -18,6 +18,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @ApplicationScoped
 @ServerEndpoint(value = "/ws")
@@ -26,6 +27,7 @@ public class WebSocketServer {
 	private static final Map<Session, Player> clients = new ConcurrentHashMap<>();
 	private static final GameState world = new GameState();
 	private static final ObjectMapper mapper = new ObjectMapper();
+	private static final GameMap currentMap = new GameMap();
 
 	@OnOpen
 	public void onOpen(final Session session) {
@@ -48,29 +50,41 @@ public class WebSocketServer {
 		Player player = clients.get(session);
 
 		if ("left".equals(message)) {
-			player.move(-10, 0);
+			player.move(-16, 0);
 		} else if ("right".equals(message)) {
-			player.move(10, 0);
+			player.move(16, 0);
 		} else if ("down".equals(message)) {
-			player.move(0, 10);
+			player.move(0, 16);
 		} else if ("up".equals(message)) {
-			player.move(0, -10);
+			player.move(0, -16);
+		} else if ("loadMap".equals(message)) {
+			sendPrivateMessage(session, new JsonMessage("map", currentMap));
 		}
 		
-		
-		try {
-			String msg = mapper.writeValueAsString(world.getPlayers());
-			sendMessageToAll(msg);
-		} catch (IOException	 e) {
-			e.printStackTrace();
-		}
+		sendMessageToAll(new JsonMessage("players", world.getPlayers()));
 		
 		System.out.println("Message: " + message);
 	}
+	
+	private void sendPrivateMessage(Session session, JsonMessage jsonMessage) {
+		try {
+			String message = mapper.writeValueAsString(jsonMessage);
+			session.getBasicRemote().sendText(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-	private void sendMessageToAll(String message) throws IOException {
+	private void sendMessageToAll(JsonMessage jsonMessage) {
 		for (Map.Entry<Session, Player> e : clients.entrySet()) {
-			e.getKey().getBasicRemote().sendText(message);
+			try {
+				String message = mapper.writeValueAsString(jsonMessage);
+				e.getKey().getBasicRemote().sendText(message);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 
